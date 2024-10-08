@@ -4,7 +4,7 @@ namespace App\Enums\Permission;
 
 enum CategoryEnum: string
 {
-    case  PUBLISH = 'publish category';
+    case PUBLISH = 'publish category';
     case EDIT = 'edit category';
     case DELETE = 'delete category';
 

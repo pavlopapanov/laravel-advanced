@@ -40,7 +40,7 @@ class UserFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (User $user) {
-            if (!$user->hasAnyRole(RolesEnum::values())) {
+            if (! $user->hasAnyRole(RolesEnum::values())) {
                 $user->assignRole(RolesEnum::CUSTOMER->value);
             }
         });
@@ -51,14 +51,14 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
     }
 
     public function admin(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'email' => 'admin@admin.com',
         ])->afterCreating(function (User $user) {
             $user->syncRoles([RolesEnum::ADMIN->value]);
@@ -74,7 +74,7 @@ class UserFactory extends Factory
 
     public function withEmail(string $email): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'email' => $email,
         ]);
     }
