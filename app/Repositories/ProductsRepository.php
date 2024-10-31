@@ -5,12 +5,17 @@ namespace App\Repositories;
 use App\Http\Requests\Admin\Products\CreateRequest;
 use App\Http\Requests\Admin\Products\EditRequest;
 use App\Models\Product;
+use App\Repositories\Contracts\ImagesRepositoryContract;
 use App\Repositories\Contracts\ProductsRepositoryContract;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ProductsRepository implements ProductsRepositoryContract
 {
+    public function __construct(protected ImagesRepositoryContract $imagesRepository)
+    {
+    }
+
     /**
      * @throws \Throwable
      */
@@ -21,7 +26,7 @@ class ProductsRepository implements ProductsRepositoryContract
 
             $data = $this->formRequestData($request);
             $product = Product::create($data['attributes']);
-            $product->categories()->sync($data['categories']);
+            $this->updateRelationData($product, $data);
 
             DB::commit();
 
@@ -35,17 +40,44 @@ class ProductsRepository implements ProductsRepositoryContract
 
     public function update(Product $product, EditRequest $request): bool
     {
-        return false;
+        try {
+            DB::beginTransaction();
+
+            $data = $this->formRequestData($request);
+            $product->update($data['attributes']);
+            $this->updateRelationData($product, $data);
+
+            DB::commit();
+
+            return true;
+        } catch (\Throwable $exception) {
+            DB::rollBack();
+            logs()->error($exception);
+            return false;
+        }
     }
 
-    protected function formRequestData(CreateRequest $request): array
+    protected function updateRelationData(Product $product, array $data): void
+    {
+        $product->categories()->sync($data['categories'] ?? []);
+
+        $this->imagesRepository->attach(
+            $product,
+            'images',
+            $data['images'] ?? [],
+            $product->imagesPath
+        );
+    }
+
+    protected function formRequestData(CreateRequest|EditRequest $request): array
     {
         return [
             'attributes' => collect($request->validated())
-                ->except(['categories'])
+                ->except(['categories', 'images'])
                 ->prepend(Str::slug($request->get('title')), 'slug')
                 ->toArray(),
-            'categories' => $request->get('categories', [])
+            'categories' => $request->get('categories', []),
+            'images' => $request->file('images', []),
         ];
     }
 }

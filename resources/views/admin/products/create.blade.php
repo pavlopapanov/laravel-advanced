@@ -4,14 +4,14 @@
     <div class="container">
         <div class="row">
             <div class="col-12 d-flex align-items-center justify-content-center pt-5">
-                <form class="card w-50" method="POST" enctype="multipart/form-data" action="{{route('admin.products.store')}}">
+                <form class="card w-50" method="POST" enctype="multipart/form-data"
+                      action="{{route('admin.products.store')}}">
                     @csrf
 
                     <h5 class="card-header">Create product</h5>
                     <div class="card-body">
                         <div class="row mb-3">
                             <label for="title" class="col-md-4 col-form-label text-md-end">{{ __('Title') }}</label>
-
                             <div class="col-md-6">
                                 <input id="title" type="text"
                                        class="form-control @error('title') is-invalid @enderror" name="title"
@@ -19,15 +19,14 @@
 
                                 @error('title')
                                 <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                    <strong>{{ $message }}</strong>
+                                </span>
                                 @enderror
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <label for="SKU" class="col-md-4 col-form-label text-md-end">{{ __('SKU') }}</label>
-
                             <div class="col-md-6">
                                 <input id="SKU" type="text"
                                        class="form-control @error('SKU') is-invalid @enderror" name="SKU"
@@ -44,7 +43,6 @@
                         <div class="row mb-3">
                             <label for="description"
                                    class="col-md-4 col-form-label text-md-end">{{ __('Description') }}</label>
-
                             <div class="col-md-6">
                                     <textarea id="description" type="text"
                                               class="form-control" name="description"
@@ -66,8 +64,8 @@
 
                                 @error('categories')
                                 <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                    <strong>{{ $message }}</strong>
+                                </span>
                                 @enderror
                             </div>
                         </div>
@@ -84,8 +82,8 @@
 
                                 @error('price')
                                 <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                    <strong>{{ $message }}</strong>
+                                </span>
                                 @enderror
                             </div>
                         </div>
@@ -105,8 +103,8 @@
 
                                 @error('discount')
                                 <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                    <strong>{{ $message }}</strong>
+                                </span>
                                 @enderror
                             </div>
                         </div>
@@ -122,8 +120,8 @@
 
                                 @error('quantity')
                                 <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                    <strong>{{ $message }}</strong>
+                                </span>
                                 @enderror
                             </div>
                         </div>
@@ -141,31 +139,29 @@
 
                                 @error('thumbnail')
                                 <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                    <strong>{{ $message }}</strong>
+                                </span>
                                 @enderror
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <label for="images"
+                                   class="col-md-4 col-form-label text-md-end">{{ __('Additional Images') }}</label>
+                            <div class="col-12 mb-4 d-flex align-items-center justify-content-center">
+                                <div id="images-wrapper" class="row"></div>
+                            </div>
+                            <div class="col-md-12">
+                                <input id="images" type="file"
+                                       class="form-control @error('images') is-invalid @enderror" name="images[]"
+                                       multiple>
 
-                        {{--                        <div class="row mb-3">--}}
-                        {{--                            <label for="images"--}}
-                        {{--                                   class="col-md-4 col-form-label text-md-end">{{ __('Additional Images') }}</label>--}}
-
-                        {{--                            <div class="col-12 mb-4 d-flex align-items-center justify-content-center">--}}
-                        {{--                                <div id="images-wrapper" class="row"></div>--}}
-                        {{--                            </div>--}}
-                        {{--                            <div class="col-md-12">--}}
-                        {{--                                <input id="images" type="file"--}}
-                        {{--                                       class="form-control @error('images') is-invalid @enderror" name="images[]" multiple>--}}
-
-                        {{--                                @error('images')--}}
-                        {{--                                <span class="invalid-feedback" role="alert">--}}
-                        {{--                                        <strong>{{ $message }}</strong>--}}
-                        {{--                                    </span>--}}
-                        {{--                                @enderror--}}
-                        {{--                            </div>--}}
-                        {{--                        </div>--}}
-
+                                @error('images')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-end">
                         <button type="submit" class="btn btn-outline-success">Create</button>
