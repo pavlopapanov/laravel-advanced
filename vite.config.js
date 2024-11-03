@@ -7,6 +7,9 @@ export default defineConfig({
             input: [
                 'resources/sass/app.scss',
                 'resources/js/app.js',
+                'resources/js/admin/products-preview.js',
+                'resources/js/admin/images-actions.js',
+                'resources/js/admin/attributes.js',
             ],
             refresh: true,
         }),
