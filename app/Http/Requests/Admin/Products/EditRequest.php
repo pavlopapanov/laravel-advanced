@@ -36,6 +36,9 @@ class EditRequest extends FormRequest
             'categories.*' => ['required', 'integer', 'exists:categories,id'],
             'thumbnail' => ['nullable', 'image', 'mimes:jpg,jpeg,png'],
             'images.*' => ['image', 'mimes:jpg,jpeg,png'],
+            'options.*.attribute_option_id' => ['required', 'integer', 'exists:attribute_options,id'],
+            'options.*.quantity' => ['required', 'numeric', 'min:0'],
+            'options.*.price' => ['required', 'numeric', 'min:1'],
         ];
     }
 }

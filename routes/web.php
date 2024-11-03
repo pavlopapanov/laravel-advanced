@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AttributesController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductsController;
@@ -15,6 +16,7 @@ Route::resource('products', \App\Http\Controllers\ProductsController::class)
 Route::name('admin.')->prefix('admin')->middleware('role:admin|moderator')->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard');
     Route::resource('categories', CategoriesController::class)->except(['show']);
+    Route::resource('attributes', AttributesController::class)->except(['show']);
     Route::resource('products', ProductsController::class)->except(['show']);
 });
 

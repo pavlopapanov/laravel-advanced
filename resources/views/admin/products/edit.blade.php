@@ -112,7 +112,6 @@
                         <div class="row mb-3">
                             <label for="quantity"
                                    class="col-md-4 col-form-label text-md-end">{{ __('Quantity') }}</label>
-
                             <div class="col-md-6">
                                 <input id="quantity" type="number"
                                        class="form-control @error('quantity') is-invalid @enderror" name="quantity"
@@ -123,6 +122,44 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <h5>Attributes</h5>
+                                </div>
+                                <div class="col-10">
+                                    <select id="attributes" class="form-select" multiple>
+                                        @foreach($attributes as $attribute)
+                                            <optgroup label="{{ $attribute->name }}">
+                                                @foreach($attribute->options as $option)
+                                                    @if(in_array($option->id, $selectedOptions))
+                                                        @continue
+                                                    @endif
+
+                                                    <option value="{{ $option->id }}">{{ $option->value }}</option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-2">
+                                    <button class="btn btn-outline-info add-options">
+                                        <i class="fa-regular fa-square-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row options-wrapper" data-key="{{ $product->options->count() }}">
+                                @foreach($product->options as $key => $option)
+                                    <div class="input-group mb-2">
+                                        <span class="input-group-text">{{ $option->value }}</span>
+                                        <input type="hidden" name="options[{{ $key }}][attribute_option_id]" min="0" value="{{ $option->id }}">
+                                        <input type="number" name="options[{{ $key }}][quantity]" min="0" value="{{ $option->pivot->quantity }}" placeholder="Quantity" class="form-control">
+                                        <input type="number" name="options[{{ $key }}][price]" value="{{ $option->pivot->price }}" placeholder="Single price" class="form-control">
+                                        <button class="btn btn-danger remove-option"><i class="fa-solid fa-minus"></i></button>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -183,5 +220,9 @@
 @endsection
 
 @push('footer-js')
-    @vite(['resources/js/admin/products-preview.js', 'resources/js/admin/images-actions.js'])
+    @vite([
+    'resources/js/admin/products-preview.js',
+    'resources/js/admin/images-actions.js',
+    'resources/js/admin/attributes.js'
+    ])
 @endpush
