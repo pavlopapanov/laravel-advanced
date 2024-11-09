@@ -14,8 +14,8 @@ class HomeController extends Controller
      */
     public function __invoke()
     {
-        $categories = Category::orderBy('id')->take(5)->get();
-        $products = Product::orderBy('id')->take(8)->get();
+        $categories = Category::orderByDesc('id')->take(5)->get();
+        $products = Product::orderByDesc('id')->take(8)->get();
 
         return view('home', compact('categories', 'products'));
     }

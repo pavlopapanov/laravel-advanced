@@ -33,11 +33,20 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto">
-
+                    <a href="{{ route('products.index') }}" class="nav-link">{{ __('Products') }}</a>
                 </ul>
 
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="{{ route('cart.index') }}">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span style="font-size: 10px;" class="position-absolute top-20 start-90 translate-middle badge bg-danger rounded-pill">
+                                {{ Cart::instance('cart')->countItems() }}
+                            </span>
+                        </a>
+                    </li>
+
                     <!-- Authentication Links -->
                     @guest
                         @if (Route::has('login'))
@@ -88,5 +97,6 @@
 </div>
 <script src="{{ asset('js/iziToast.js') }}"></script>
 @include('vendor.lara-izitoast.toast')
+@stack('footer-js')
 </body>
 </html>

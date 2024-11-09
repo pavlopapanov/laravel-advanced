@@ -15,13 +15,21 @@
                     <small class="col-12 col-sm-6 text-decoration-line-through">{{ $product->price }} $</small>
                 </div>
             @endif
-            <div class="row">
-                <div class="col-12 col-sm-6">Price:</div>
-                <div class="col-12 col-sm-6">{{ $product->finalPrice }} $</div>
-            </div>
+            @if($product->isSimple)
+                <div class="row">
+                    <div class="col-12 col-sm-6">Price:</div>
+                    <div class="col-12 col-sm-6">{{ $product->finalPrice() }} $</div>
+                </div>
+            @else
+                <div class="row">
+                    <div class="col-12">Product with options</div>
+                </div>
+            @endif
         </div>
         <div class="card-footer">
-            <a href="#" class="btn btn-outline-success my-2">Buy</a>
+            @if($product->isSimple)
+                <a href="#" class="btn btn-outline-success my-2">Buy</a>
+            @endif
             <a href="{{ route('products.show', $product) }}" class="btn btn-outline-info my-2">Show</a>
         </div>
     </div>

@@ -7,6 +7,9 @@ use App\Http\Requests\Admin\Products\EditRequest;
 use App\Models\Product;
 use App\Repositories\Contracts\ImagesRepositoryContract;
 use App\Repositories\Contracts\ProductsRepositoryContract;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -14,6 +17,20 @@ class ProductsRepository implements ProductsRepositoryContract
 {
     public function __construct(protected ImagesRepositoryContract $imagesRepository)
     {
+    }
+
+    public function paginate(Request $request): LengthAwarePaginator
+    {
+        $products = Product::with(['categories'])
+            ->select('products.*')
+            ->orderByDesc('id')
+            ->when($request->has('options'), function (Builder $query) use ($request) {
+                $query->join('attribute_option_product', 'products.id', '=', 'attribute_option_product.product_id')
+                    ->where('attribute_option_product.attribute_option_id', $request->input('options'))
+                    ->distinct();
+            });
+
+        return $products->paginate($request->input('per_page', 10));
     }
 
     /**
@@ -70,7 +87,7 @@ class ProductsRepository implements ProductsRepositoryContract
 
         if (!empty($data['options'])) {
             $options = collect($data['options'])
-                ->unique(fn ($item) => $item['attribute_option_id'])
+                ->unique(fn($item) => $item['attribute_option_id'])
                 ->values()
                 ->toArray();
 
