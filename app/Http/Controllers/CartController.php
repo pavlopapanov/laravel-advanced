@@ -50,15 +50,38 @@ class CartController extends Controller
     {
         $product->load(['options']);
         $data = $request->validate([
-           'rowId' => ['required', 'string'],
+            'rowId' => ['required', 'string'],
             'qty' => ['required', 'numeric', 'min:1'],
         ]);
 
         $option = Cart::instance('cart')->get($data['rowId'])?->options?->first();
-        $maxQuantity = $product->options->where('value', $option)?->first()?->pivot->quantity;
+
+        $maxQuantity = $option
+            ? $product->options->where('value', $option)?->first()?->pivot->quantity
+            : $product->quantity;
+
+        if ($data['qty'] > $maxQuantity) {
+            nofity()->warning("Maximum quantity for product {$product->title} is {$maxQuantity}");
+            return redirect()->back();
+        }
+
+        Cart::instance('cart')->update($data['rowId'], $data['qty']);
+
+        notify()->success("Product qty updated successfully");
+
+        return redirect()->back();
     }
 
-    public function delete(Request $request)
+    public function remove(Request $request)
     {
+        $data = $request->validate([
+            'rowId' => ['required', 'string'],
+        ]);
+
+        Cart::instance('cart')->remove($data['rowId']);
+
+        notify()->success("Product was removed successfully");
+
+        return redirect()->back();
     }
 }
