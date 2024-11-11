@@ -42,6 +42,11 @@ class Product extends Model
             ->with(['attribute']);
     }
 
+    public function orders(): belongsToMany
+    {
+        return $this->belongsToMany(Order::class);
+    }
+
     public function thumbnailUrl(): Attribute
     {
         return Attribute::get(function () {

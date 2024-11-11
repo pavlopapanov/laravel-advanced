@@ -13,5 +13,10 @@ class CheckoutController extends Controller
             notify()->warning("Your cart is empty");
             return redirect()->back();
         }
+
+        $cart = Cart::instance('cart');
+        $user = auth()?->user();
+
+        return view('checkout.index', compact('cart', 'user'));
     }
 }
