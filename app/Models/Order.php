@@ -31,7 +31,7 @@ class Order extends Model
             ->withPivot(['quantity', 'single_price', 'name', 'attributes']);
     }
 
-    public function transactions(): HasOne
+    public function transaction(): HasOne
     {
         return $this->hasOne(Transaction::class);
     }

@@ -4,8 +4,10 @@ use App\Http\Controllers\Admin\AttributesController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductsController;
+use App\Http\Controllers\Ajax\Payments\PaypalController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\Pages\ThankYouController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', \App\Http\Controllers\HomeController::class)->name('home');
@@ -23,6 +25,7 @@ Route::name('cart.')->prefix('cart')->group(function () {
 });
 
 Route::get('checkout', CheckoutController::class)->name('checkout');
+Route::get('orders/{vendorOrderId}/thank-you', ThankYouController::class)->name('thank-you');
 
 Route::name('admin.')->prefix('admin')->middleware('role:admin|moderator')->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard');
@@ -34,5 +37,10 @@ Route::name('admin.')->prefix('admin')->middleware('role:admin|moderator')->grou
 Route::name('ajax.')->prefix('ajax')->group(function () {
     Route::middleware('auth', 'role:admin|moderator')->group(function () {
         Route::delete('images/{image}', \App\Http\Controllers\Ajax\RemoveImageController::class)->name('images.remove');
+    });
+
+    Route::prefix('paypal')->name('paypal.')->group(function () {
+       Route::post('order', [PayPalController::class, 'create'])->name('order.create');
+       Route::post('order/{vendorOrderId}/capture', [PayPalController::class, 'capture'])->name('order.capture');
     });
 });
