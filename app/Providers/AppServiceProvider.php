@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Repositories\Contracts\ImagesRepositoryContract;
+use App\Repositories\Contracts\InvoicesServiceContract;
 use App\Repositories\Contracts\OrderRepositoryContract;
 use App\Repositories\Contracts\ProductsRepositoryContract;
 use App\Repositories\ImagesRepository;
+use App\Repositories\InvoicesService;
 use App\Repositories\OrderRepository;
 use App\Repositories\ProductsRepository;
 use App\Services\Contracts\FileServiceContract;
@@ -23,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
         ImagesRepositoryContract::class => ImagesRepository::class,
         OrderRepositoryContract::class => OrderRepository::class,
         PaypalServiceContract::class => PaypalService::class,
+        InvoicesServiceContract::class => InvoicesService::class,
     ];
 
     /**

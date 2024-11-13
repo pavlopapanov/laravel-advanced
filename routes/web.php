@@ -8,7 +8,15 @@ use App\Http\Controllers\Ajax\Payments\PaypalController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Pages\ThankYouController;
+use App\Models\Order;
 use Illuminate\Support\Facades\Route;
+
+Route::get('invoice', function() {
+   $order = Order::query()->first();
+   $invoice = app(\App\Repositories\Contracts\InvoicesServiceContract::class);
+
+   return $invoice->generate($order)->stream();
+});
 
 Route::get('/', \App\Http\Controllers\HomeController::class)->name('home');
 
@@ -18,14 +26,18 @@ Route::resource('products', \App\Http\Controllers\ProductsController::class)
     ->only(['index', 'show']);
 
 Route::name('cart.')->prefix('cart')->group(function () {
-   Route::get('/', [CartController::class, 'index'])->name('index');
-   Route::post('{product}', [CartController::class, 'add'])->name('add');
-   Route::delete('/', [CartController::class, 'remove'])->name('remove');
-   Route::put('{product}', [CartController::class, 'update'])->name('update');
+    Route::get('/', [CartController::class, 'index'])->name('index');
+    Route::post('{product}', [CartController::class, 'add'])->name('add');
+    Route::delete('/', [CartController::class, 'remove'])->name('remove');
+    Route::put('{product}', [CartController::class, 'update'])->name('update');
 });
 
 Route::get('checkout', CheckoutController::class)->name('checkout');
 Route::get('orders/{vendorOrderId}/thank-you', ThankYouController::class)->name('thank-you');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('invoices/{order}', \App\Http\Controllers\InvoicesController::class)->name('invoice');
+});
 
 Route::name('admin.')->prefix('admin')->middleware('role:admin|moderator')->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard');
@@ -40,7 +52,7 @@ Route::name('ajax.')->prefix('ajax')->group(function () {
     });
 
     Route::prefix('paypal')->name('paypal.')->group(function () {
-       Route::post('order', [PayPalController::class, 'create'])->name('order.create');
-       Route::post('order/{vendorOrderId}/capture', [PayPalController::class, 'capture'])->name('order.capture');
+        Route::post('order', [PayPalController::class, 'create'])->name('order.create');
+        Route::post('order/{vendorOrderId}/capture', [PayPalController::class, 'capture'])->name('order.capture');
     });
 });
