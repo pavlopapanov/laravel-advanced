@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Attributes\Option;
 use App\Observers\ProductObserver;
+use App\Observers\WishListObserver;
 use App\Services\Contracts\FileServiceContract;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Storage;
 /**
  * @mixin IdeHelperProduct
  */
-#[ObservedBy(ProductObserver::class)]
+#[ObservedBy([ProductObserver::class, WishListObserver::class])]
 class Product extends Model
 {
     use HasFactory;
