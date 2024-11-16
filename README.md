@@ -1,10 +1,3 @@
-# Migrations
+# Laravel: WishList Email Notification
 
-Створити міграції по наступним таблицям:
-
-- users
-- categories
-- products
-- images
-
-Або ж необхідні початкові таблиці на тематику вашого проекту
+Розробити функціонал по email сповіщенню користувачів якщо продукт з їх wishlist був змінений
