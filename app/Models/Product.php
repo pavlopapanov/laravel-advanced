@@ -42,6 +42,17 @@ class Product extends Model
             ->with(['attribute']);
     }
 
+    public function followers(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            User::class,
+            'wish_list',
+            'product_id',
+            'user_id'
+        )->withPivot(['price', 'in_stock']);
+    }
+
+
     public function orders(): belongsToMany
     {
         return $this->belongsToMany(Order::class);
@@ -81,6 +92,11 @@ class Product extends Model
     public function isSimple(): Attribute
     {
         return Attribute::get(fn() => $this->options->isEmpty());
+    }
+
+    public function isInStock(): Attribute
+    {
+        return Attribute::get(fn() => $this->attributes['quantity'] > 0);
     }
 
     public function optionsWithAttributes(): Collection
