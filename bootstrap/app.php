@@ -17,6 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         ]);
     })
+    ->withEvents(discover: [
+        __DIR__ . '/../app/Listeners/',
+        __DIR__ . '/../app/Listeners/Order/',
+    ])
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

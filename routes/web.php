@@ -11,11 +11,11 @@ use App\Http\Controllers\Pages\ThankYouController;
 use App\Models\Order;
 use Illuminate\Support\Facades\Route;
 
-Route::get('invoice', function() {
-   $order = Order::query()->first();
-   $invoice = app(\App\Repositories\Contracts\InvoicesServiceContract::class);
+Route::get('invoice', function () {
+    $order = Order::query()->first();
+    $invoice = app(\App\Repositories\Contracts\InvoicesServiceContract::class);
 
-   return $invoice->generate($order)->stream();
+    return $invoice->generate($order)->stream();
 });
 
 Route::get('/', \App\Http\Controllers\HomeController::class)->name('home');
@@ -39,11 +39,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('invoices/{order}', \App\Http\Controllers\InvoicesController::class)->name('invoice');
 
     Route::post('wishlist/{product}', [\App\Http\Controllers\WishlistController::class, 'add'])->name('wishlist.add');
-    Route::delete('wishlist/{product}', [\App\Http\Controllers\WishlistController::class, 'remove'])->name('wishlist.remove');
+    Route::delete('wishlist/{product}', [\App\Http\Controllers\WishlistController::class, 'remove'])->name(
+        'wishlist.remove'
+    );
 
     Route::name('account.')->prefix('account')->group(function () {
-       Route::get('/', [\App\Http\Controllers\Account\HomeController::class, 'index'])->name('home');
-       Route::get('wishlist', \App\Http\Controllers\Account\WishListController::class)->name('wishlist');
+        Route::get('/', [\App\Http\Controllers\Account\HomeController::class, 'index'])->name('home');
+        Route::get('wishlist', \App\Http\Controllers\Account\WishListController::class)->name('wishlist');
     });
 });
 
@@ -63,4 +65,10 @@ Route::name('ajax.')->prefix('ajax')->group(function () {
         Route::post('order', [PayPalController::class, 'create'])->name('order.create');
         Route::post('order/{vendorOrderId}/capture', [PayPalController::class, 'capture'])->name('order.capture');
     });
+});
+
+Route::name('callback.')->prefix('callback')->group(function () {
+    Route::get('telegram', \App\Http\Controllers\Callbacks\TelegramAuthController::class)
+        ->name('telegram')
+        ->middleware('role:admin');
 });

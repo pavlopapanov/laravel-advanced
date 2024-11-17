@@ -76,9 +76,9 @@ paypal.Buttons({
                 iziToast.success({
                     title: 'Order was created',
                     position: 'topRight',
-                    // onClosing: () => {
-                    //     window.location.href = `/orders/${orderData.vendor_order_id}/thank-you`
-                    // }
+                    onClosing: () => {
+                        window.location.href = `/orders/${orderData.vendor_order_id}/thank-you`
+                    }
                 })
             }).catch((err) => {
                 let errorDetail = Array.isArray(err.details) && err.details[0];
